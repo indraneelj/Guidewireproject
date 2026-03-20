@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GigShield — AI-Powered Parametric Insurance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'DM Sans', sans-serif; 
+      background: #0f1419; 
+      color: #e4e6eb; 
+      line-height: 1.6;
+    }
+    
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header */
+    header {
+      background: rgba(15, 20, 25, 0.95);
+      border-bottom: 1px solid #222;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo { 
+      font-family: 'Syne', sans-serif; 
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    nav button {
+      background: none;
+      border: none;
+      color: #a0a6ad;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    nav button:hover, nav button.active {
+      color: #fff;
+      background: rgba(255, 107, 107, 0.1);
+    }
+    
+    /* Main Content */
+    main { padding: 2rem 0; }
+    
+    .page { display: none; }
+    .page.active { display: block; }
+    
+    /* Dashboard Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 154, 77, 0.05));
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 107, 107, 0.4);
+    }
+    
+    .stat-label { 
+      font-size: 0.85rem; 
+      color: #888; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-value { 
+      font-size: 2.2rem; 
+      font-weight: 700; 
+      background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .stat-detail { 
+      font-size: 0.8rem; 
+      color: #666; 
+      margin-top: 0.5rem;
+    }
+    
+    /* Forms */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #ccc;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: #e4e6eb;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.05);
+    }
+    
+    /* Buttons */
+    button.btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    
+    button.btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+    
+    button.btn:active {
+      transform: translateY(0);
+    }
+    
+    button.btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e4e6eb;
+    }
+    
+    button.btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    
+    th {
+      background: rgba(255, 107, 107, 0.1);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #ff9a4d;
+      border-bottom: 1px solid rgba(255, 107, 107, 0.2);
+    }
+    
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    tr:hover {
+      background: rgba(255, 107, 107, 0.05);
+    }
+    
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .badge-success { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .badge-warning { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .badge-danger { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+    .badge-info { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+    
+    /* Alert */
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid;
+    }
+    
+    .alert-success { 
+      background: rgba(76, 175, 80, 0.1); 
+      border-color: #4caf50;
+      color: #4caf50;
+    }
+    
+    .alert-error { 
+      background: rgba(244, 67, 54, 0.1); 
+      border-color: #f44336;
+      color: #f44336;
+    }
+    
+    /* Activity Feed */
+    .activity-item {
+      padding: 1rem;
+      border-left: 3px solid rgba(255, 107, 107, 0.3);
+      margin-bottom: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 4px;
+    }
+    
+    .activity-time {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 0.3rem;
+    }
+    
+    .activity-title {
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    
+    .activity-desc {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    
+    /* Sections */
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #fff;
+      border-bottom: 2px solid rgba(255, 107, 107, 0.2);
+      padding-bottom: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { gap: 0.5rem; }
+      nav button { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">🛡️ GigShield</div>
+      <nav>
+        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+        <button class="nav-btn" data-page="workers">Workers</button>
+        <button class="nav-btn" data-page="onboard">Onboard</button>
+        <button class="nav-btn" data-page="disruptions">Disruptions</button>
+        <button class="nav-btn" data-page="claims">Claims</button>
+        <button class="nav-btn" data-page="analytics">Analytics</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Dashboard Page -->
+    <div id="dashboard" class="page active">
+      <h2 class="section-title">📊 Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Workers</div>
+          <div class="stat-value" id="stat-workers">0</div>
+          <div class="stat-detail">Active gig workers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Policies</div>
+          <div class="stat-value" id="stat-policies">0</div>
+          <div class="stat-detail">Live coverage</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Payouts</div>
+          <div class="stat-value" id="stat-payouts">₹0</div>
+          <div class="stat-detail">Disbursed via UPI</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Claims</div>
+          <div class="stat-value" id="stat-pending">0</div>
+          <div class="stat-detail">Under review</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Risk Score</div>
+          <div class="stat-value" id="stat-risk">0</div>
+          <div class="stat-detail">Out of 100</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Disruptions</div>
+          <div class="stat-value" id="stat-disruptions">0</div>
+          <div class="stat-detail">Real-time events</div>
+        </div>
+      </div>
+
+      <button class="btn" onclick="seedData()">📦 Load Demo Data</button>
+      
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem;">📰 Activity Feed</h3>
+      <div id="activity-feed"></div>
+    </div>
+
+    <!-- Workers Page -->
+    <div id="workers" class="page">
+      <h2 class="section-title">👥 Workers Registry</h2>
+      <table id="workers-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Platform</th>
+            <th>Risk Score</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="workers-tbody">
+          <tr><td colspan="5" style="text-align: center; color: #666;">No workers yet. Load demo data first.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Onboard Page -->
+    <div id="onboard" class="page">
+      <h2 class="section-title">✨ Onboard New Worker</h2>
+      <div style="max-width: 600px;">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="onboard-name" placeholder="e.g., Ravi Kumar">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="onboard-phone" placeholder="e.g., 9876543210">
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="onboard-city" placeholder="e.g., Hyderabad">
+        </div>
+        <div class="form-group">
+          <label>Delivery Platform</label>
+          <select id="onboard-platform">
+            <option>Zomato</option>
+            <option>Swiggy</option>
+            <option>Zepto</option>
+            <option>Blinkit</option>
+            <option>Amazon</option>
+            <option>Dunzo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Years of Experience</label>
+          <input type="number" id="onboard-experience" placeholder="e.g., 2" min="0" max="20">
+        </div>
+        <div class="form-group">
+          <label>Avg Weekly Earnings (₹)</label>
+          <input type="number" id="onboard-earnings" placeholder="e.g., 3500" min="0">
+        </div>
+        <div class="form-group">
+          <label>Delivery Zone</label>
+          <input type="text" id="onboard-zone" placeholder="e.g., Banjara Hills">
+        </div>
+        <div class="form-group">
+          <label>UPI ID</label>
+          <input type="text" id="onboard-upi" placeholder="e.g., 9876543210@paytm">
+        </div>
+        <button class="btn" onclick="onboardWorker()">Create Policy & Onboard</button>
+        <div id="onboard-result" style="margin-top: 1.5rem;"></div>
+      </div>
+    </div>
+
+    <!-- Disruptions Page -->
+    <div id="disruptions" class="page">
+      <h2 class="section-title">⚠️ Live Disruptions</h2>
+      <div style="margin-bottom: 2rem;">
+        <button class="btn" onclick="toggleTriggerForm()">🚨 Trigger New Event</button>
+        <div id="trigger-form" style="display: none; margin-top: 1.5rem; max-width: 600px; background: rgba(255, 255, 255, 0.02); padding: 1.5rem; border-radius: 6px;">
+          <div class="form-group">
+            <label>Event Type</label>
+            <select id="trigger-type">
+              <option value="weather">Weather</option>
+              <option value="pollution">Pollution</option>
+              <option value="social">Social</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subtype</label>
+            <input type="text" id="trigger-subtype" placeholder="e.g., Heavy Rain, Severe AQI">
+          </div>
+          <div class="form-group">
+            <label>Severity</label>
+            <select id="trigger-severity">
+              <option>LOW</option>
+              <option>MEDIUM</option>
+              <option selected>HIGH</option>
+              <option>CRITICAL</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Affected Zones (comma-separated)</label>
+            <textarea id="trigger-zones" placeholder="e.g., Hyderabad, Vizag" rows="3"></textarea>
+          </div>
+          <button class="btn" onclick="triggerDisruption()">Trigger Event</button>
+        </div>
+      </div>
+      <table id="disruptions-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Subtype</th>
+            <th>Severity</th>
+            <th>Affected Zones</th>
+            <th>Status</th>
+            <th>Triggered At</th>
+          </tr>
+        </thead>
+        <tbody id="disruptions-tbody">
+          <tr><td colspan="6" style="text-align: center; color: #666;">No disruptions yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Claims Page -->
+    <div id="claims" class="page">
+      <h2 class="section-title">📋 Claims Pipeline</h2>
+      <table id="claims-table">
+        <thead>
+          <tr>
+            <th>Worker</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Fraud Score</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="claims-tbody">
+          <tr><td colspan="6" style="text-align: center; color: #666;">No claims yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Analytics Page -->
+    <div id="analytics" class="page">
+      <h2 class="section-title">📈 Analytics</h2>
+      <div style="background: rgba(255, 255, 255, 0.02); padding: 1.5rem; border-radius: 6px;">
+        <h3 style="margin-bottom: 1rem;">By Platform</h3>
+        <table style="font-size: 0.9rem; width: 100%;">
+          <thead>
+            <tr><th>Platform</th><th>Workers</th><th>Premium Revenue</th></tr>
+          </thead>
+          <tbody id="analytics-platform"></tbody>
+        </table>
+        
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem;">By City</h3>
+        <table style="font-size: 0.9rem; width: 100%;">
+          <thead>
+            <tr><th>City</th><th>Worker Count</th></tr>
+          </thead>
+          <tbody id="analytics-city"></tbody>
+        </table>
+
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Claims by Type</h3>
+        <table style="font-size: 0.9rem; width: 100%;">
+          <thead>
+            <tr><th>Disruption Type</th><th>Count</th></tr>
+          </thead>
+          <tbody id="analytics-claims"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // API Base URL
+    const API = 'http://localhost:3000/api';
+
+    // Navigation
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const page = document.getElementById(btn.dataset.page);
+        if (page) {
+          page.classList.add('active');
+          if (btn.dataset.page === 'workers') loadWorkers();
+          if (btn.dataset.page === 'disruptions') loadDisruptions();
+          if (btn.dataset.page === 'claims') loadClaims();
+          if (btn.dataset.page === 'analytics') loadAnalytics();
+        }
+      });
+    });
+
+    // Load Dashboard
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`${API}/dashboard`);
+        const data = await res.json();
+        document.getElementById('stat-workers').textContent = data.totalWorkers;
+        document.getElementById('stat-policies').textContent = data.activePolicies;
+        document.getElementById('stat-payouts').textContent = '₹' + data.totalPayouts.toLocaleString();
+        document.getElementById('stat-pending').textContent = data.pendingClaims;
+        document.getElementById('stat-risk').textContent = data.avgRiskScore;
+        document.getElementById('stat-disruptions').textContent = data.activeDisruptions;
+        
+        loadActivityFeed();
+      } catch (err) {
+        console.error('Dashboard error:', err);
+      }
+    }
+
+    // Load Activity Feed
+    async function loadActivityFeed() {
+      try {
+        const [workers, claims, disruptions] = await Promise.all([
+          fetch(`${API}/workers`).then(r => r.json()),
+          fetch(`${API}/claims`).then(r => r.json()),
+          fetch(`${API}/disruptions`).then(r => r.json())
+        ]);
+
+        const feed = document.getElementById('activity-feed');
+        const events = [
+          ...workers.slice(-3).map(w => ({
+            time: new Date(w.joinedAt).toLocaleString(),
+            title: `✅ ${w.name} joined`,
+            desc: `${w.city} • ${w.platform} • Risk: ${w.riskScore}`
+          })),
+          ...claims.slice(-3).map(c => ({
+            time: new Date(c.createdAt).toLocaleString(),
+            title: `${c.status === 'APPROVED' ? '✅' : '❌'} Claim from ${c.workerName}`,
+            desc: `₹${c.amount} • ${c.disruptionType} • Score: ${c.fraudScore}`
+          })),
+          ...disruptions.slice(-3).map(d => ({
+            time: new Date(d.triggeredAt).toLocaleString(),
+            title: `⚠️ ${d.subtype}`,
+            desc: `${d.affectedZones.join(', ')} • ${d.severity}`
+          }))
+        ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
+
+        feed.innerHTML = events.map(e => `
+          <div class="activity-item">
+            <div class="activity-time">${e.time}</div>
+            <div class="activity-title">${e.title}</div>
+            <div class="activity-desc">${e.desc}</div>
+          </div>
+        `).join('') || '<div class="activity-item">No recent activity</div>';
+      } catch (err) {
+        console.error('Activity feed error:', err);
+      }
+    }
+
+    // Load Workers
+    async function loadWorkers() {
+      try {
+        const res = await fetch(`${API}/workers`);
+        const workers = await res.json();
+        const tbody = document.getElementById('workers-tbody');
+        if (workers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">No workers yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = workers.map(w => `
+          <tr>
+            <td>${w.name}</td>
+            <td>${w.city}</td>
+            <td>${w.platform}</td>
+            <td>${w.riskScore} <span class="badge ${w.riskCategory === 'LOW' ? 'badge-success' : w.riskCategory === 'MEDIUM' ? 'badge-warning' : 'badge-danger'}">${w.riskCategory}</span></td>
+            <td><span class="badge badge-success">${w.status}</span></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Workers error:', err);
+      }
+    }
+
+    // Onboard Worker
+    async function onboardWorker() {
+      const data = {
+        name: document.getElementById('onboard-name').value,
+        phone: document.getElementById('onboard-phone').value,
+        city: document.getElementById('onboard-city').value,
+        platform: document.getElementById('onboard-platform').value,
+        experience: document.getElementById('onboard-experience').value,
+        avgWeeklyEarnings: document.getElementById('onboard-earnings').value,
+        deliveryZone: document.getElementById('onboard-zone').value,
+        upiId: document.getElementById('onboard-upi').value,
+      };
+
+      if (!data.name || !data.phone || !data.city) {
+        alert('Please fill required fields');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/workers/onboard`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const result = await res.json();
+        
+        if (result.error) {
+          document.getElementById('onboard-result').innerHTML = `<div class="alert alert-error">${result.error}</div>`;
+          return;
+        }
+
+        const worker = result.worker;
+        const policyRes = await fetch(`${API}/policies/create`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workerId: worker.id, planType: 'STANDARD' })
+        });
+        const policy = await policyRes.json();
+
+        const msg = `
+          <div class="alert alert-success">
+            <strong>✅ Onboarded Successfully!</strong><br>
+            Worker ID: ${worker.id}<br>
+            Risk Score: ${worker.riskScore} (${worker.riskCategory})<br>
+            Premium: ₹${policy.policy.weeklyPremium}/week<br>
+            Coverage: ₹${policy.policy.coverageAmount}
+          </div>
+        `;
+        document.getElementById('onboard-result').innerHTML = msg;
+        document.querySelectorAll('#onboard input, #onboard select').forEach(el => el.value = '');
+        loadDashboard();
+      } catch (err) {
+        document.getElementById('onboard-result').innerHTML = `<div class="alert alert-error">Error: ${err.message}</div>`;
+      }
+    }
+
+    // Load Disruptions
+    async function loadDisruptions() {
+      try {
+        const res = await fetch(`${API}/disruptions`);
+        const disruptions = await res.json();
+        const tbody = document.getElementById('disruptions-tbody');
+        if (disruptions.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #666;">No disruptions yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = disruptions.map(d => `
+          <tr>
+            <td>${d.type}</td>
+            <td>${d.subtype}</td>
+            <td><span class="badge ${d.severity === 'CRITICAL' ? 'badge-danger' : d.severity === 'HIGH' ? 'badge-warning' : 'badge-info'}">${d.severity}</span></td>
+            <td>${d.affectedZones.join(', ')}</td>
+            <td><span class="badge badge-success">${d.status}</span></td>
+            <td>${new Date(d.triggeredAt).toLocaleString()}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Disruptions error:', err);
+      }
+    }
+
+    // Trigger Disruption
+    async function triggerDisruption() {
+      const data = {
+        type: document.getElementById('trigger-type').value,
+        subtype: document.getElementById('trigger-subtype').value,
+        severity: document.getElementById('trigger-severity').value,
+        affectedZones: document.getElementById('trigger-zones').value.split(',').map(z => z.trim()).filter(z => z),
+      };
+
+      if (!data.subtype || data.affectedZones.length === 0) {
+        alert('Please fill all fields');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/disruptions/trigger`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        alert(`✅ Event triggered!\n${result.affectedWorkers} workers affected\n${result.autoClaims} auto-payouts processed`);
+        document.getElementById('trigger-form').style.display = 'none';
+        loadDisruptions();
+        loadDashboard();
+      } catch (err) {
+        alert(`Error: ${err.message}`);
+      }
+    }
+
+    function toggleTriggerForm() {
+      const form = document.getElementById('trigger-form');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Load Claims
+    async function loadClaims() {
+      try {
+        const res = await fetch(`${API}/claims`);
+        const claims = await res.json();
+        const tbody = document.getElementById('claims-tbody');
+        if (claims.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #666;">No claims yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = claims.map(c => `
+          <tr>
+            <td>${c.workerName}</td>
+            <td>₹${c.amount}</td>
+            <td>${c.disruptionType}</td>
+            <td>${c.fraudScore}</td>
+            <td><span class="badge ${c.status === 'APPROVED' ? 'badge-success' : c.status === 'UNDER_REVIEW' ? 'badge-warning' : 'badge-danger'}">${c.status}</span></td>
+            <td>${c.status === 'UNDER_REVIEW' ? `<button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="processClaim('${c.id}', 'approve')">✓</button> <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="processClaim('${c.id}', 'reject')">✗</button>` : '—'}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Claims error:', err);
+      }
+    }
+
+    // Process Claim
+    async function processClaim(claimId, action) {
+      try {
+        const res = await fetch(`${API}/claims/${claimId}/process`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action })
+        });
+        const result = await res.json();
+        alert(`✅ Claim ${action}ed`);
+        loadClaims();
+        loadDashboard();
+      } catch (err) {
+        alert(`Error: ${err.message}`);
+      }
+    }
+
+    // Load Analytics
+    async function loadAnalytics() {
+      try {
+        const res = await fetch(`${API}/analytics`);
+        const data = await res.json();
+
+        let html = '';
+        for (const [platform, info] of Object.entries(data.byPlatform)) {
+          html += `<tr><td>${platform}</td><td>${info.workers}</td><td>₹${info.premium}</td></tr>`;
+        }
+        document.getElementById('analytics-platform').innerHTML = html || '<tr><td colspan="3">No data</td></tr>';
+
+        html = '';
+        for (const [city, count] of Object.entries(data.byCity)) {
+          html += `<tr><td>${city}</td><td>${count}</td></tr>`;
+        }
+        document.getElementById('analytics-city').innerHTML = html || '<tr><td colspan="2">No data</td></tr>';
+
+        html = '';
+        for (const [type, count] of Object.entries(data.claimsByType)) {
+          html += `<tr><td>${type}</td><td>${count}</td></tr>`;
+        }
+        document.getElementById('analytics-claims').innerHTML = html || '<tr><td colspan="2">No data</td></tr>';
+      } catch (err) {
+        console.error('Analytics error:', err);
+      }
+    }
+
+    // Seed Demo Data
+    async function seedData() {
+      try {
+        const res = await fetch(`${API}/seed`, { method: 'POST' });
+        const result = await res.json();
+        alert(`✅ Loaded ${result.created.length} demo workers:\n${result.created.join(', ')}`);
+        loadDashboard();
+        loadWorkers();
+      } catch (err) {
+        alert(`Error: ${err.message}`);
+      }
+    }
+
+    // Initial load
+    loadDashboard();
+  </script>
+</body>
+</html>
