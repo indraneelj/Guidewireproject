@@ -17,7 +17,7 @@ npm install
 npm start
 
 # 4. Open in browser
-open http://localhost:3000
+open http://localhost:4000
 ```
 
 **Requirements:** Node.js 14+ only. No database. No build step. No environment variables needed.
